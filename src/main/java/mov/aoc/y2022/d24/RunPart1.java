@@ -98,17 +98,8 @@ public class RunPart1 {
         unvisitedQueue.add(new TemporalYXTuple(startMinute, from));
         visitedQueue.add(new TemporalYXTuple(startMinute, from));
 
-        int goal = 10;
         while (!unvisitedQueue.isEmpty()) {
             TemporalYXTuple currentTuple = unvisitedQueue.remove(0);
-            // System.out.println(currentTuple);
-
-            // Thread.sleep(200);
-
-            if (currentTuple.getMinute() == goal) {
-                System.out.println(goal);
-                goal+=10;
-            }
 
             for (YXTuple neighborYXTuple : getNeighbors(currentTuple.getYxTuple())) {
                 TemporalYXTuple neighborTYXTuple = new TemporalYXTuple(currentTuple.getMinute()+1, neighborYXTuple);
@@ -143,7 +134,7 @@ public class RunPart1 {
         return neighbors;
     }
 
-    public void runSolution(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
+    public int runSolution(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
         // read input file
         List<String> strLines = readInputDataAsStrLines();
 
@@ -158,14 +149,15 @@ public class RunPart1 {
         this.stormConfigs = findStormsMovementPattern();
 
         // find steps to destination
-        int steps = calculateSteps(0, new YXTuple(0, 1), new YXTuple(mapHeight-1, mapWidth-2));
-
-        System.out.println(steps);
+        return calculateSteps(0, new YXTuple(0, 1), new YXTuple(mapHeight-1, mapWidth-2));
     }
 
     public static void main(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
-        RunPart1 solution = new RunPart1();
-        solution.runSolution(args);
+        long startTime = System.currentTimeMillis();
+
+        System.out.println("RESULT: "+(new RunPart1().runSolution(args)));
+        System.out.println(String.format("Time: %ds", (System.currentTimeMillis()-startTime)/1000));
+ 
     }
 
 }
