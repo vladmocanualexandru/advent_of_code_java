@@ -1,33 +1,50 @@
 package mov.aoc.y2022.d24;
 
 public class Storm {
-    int x, y;
+    YXTuple location;
     Direction direction;
-    public Storm(int y,int x,  Direction direction) {
-        this.x = x;
-        this.y = y;
+
+    public Storm(int y, int x, Direction direction) {
+        this.location = new YXTuple(y, x);
         this.direction = direction;
     }
-    public int getX() {
-        return x;
+
+    public YXTuple getLocation() {
+        return location;
     }
-    public void setX(int x) {
-        this.x = x;
+
+    public void setLocation(YXTuple location) {
+        this.location = location;
     }
-    public int getY() {
-        return y;
-    }
-    public void setY(int y) {
-        this.y = y;
-    }
+
     public Direction getDirection() {
         return direction;
     }
+
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
+    public void move(int height, int width) {
+        location.addToY(direction.getYOffset());
+        location.addToX(direction.getXOffset());
+
+        if (location.getX() == 0) {
+            location.setX(width - 2);
+        } else if (location.getX() == width - 1) {
+            location.setX(1);
+        }
+
+        if (location.getY() == 0) {
+            location.setY(height - 2);
+        } else if (location.getY() == height - 1) {
+            location.setY(1);
+        }
+    }
+
     @Override
     public String toString() {
-        return "Storm [x=" + x + ", y=" + y + ", direction=" + direction + "]";
+        return "Storm [location=" + location + ", direction=" + direction + "]";
     }
+
 }

@@ -10,11 +10,11 @@ public enum Direction {
         this.yOffset = yOffset;
     }
 
-    public int getxOffset() {
+    public int getXOffset() {
         return xOffset;
     }
 
-    public int getyOffset() {
+    public int getYOffset() {
         return yOffset;
     }
 }
