@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class RunPart1 {
+public class Part1Solution {
 
     private YXTuple[] NEIGHBOR_POSITIONS = new YXTuple[]{new YXTuple(-1, 0),new YXTuple(0, 0),new YXTuple(1, 0),new YXTuple(0, -1),new YXTuple(0, 1)};
     
@@ -17,6 +17,21 @@ public class RunPart1 {
     private List<Storm> storms;
     private List<StormConfig> stormConfigs;
 
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
 
     private List<Storm> buildStorms(List<String> strLines) throws URISyntaxException, FileNotFoundException {
         List<Storm> storms = new ArrayList<>();
@@ -75,7 +90,7 @@ public class RunPart1 {
     private List<String> readInputDataAsStrLines() throws URISyntaxException, FileNotFoundException {
         List<String> strLines = new ArrayList<>();
 
-        URL dataResource = RunPart1.class.getClassLoader().getResource("y2022/d24/input.txt");
+        URL dataResource = Part1Solution.class.getClassLoader().getResource("y2022/d24/input.txt");
         File dataFile = new File(dataResource.toURI());
         Scanner fileScanner = new Scanner(dataFile);
 
@@ -90,7 +105,7 @@ public class RunPart1 {
         return stormConfigs.get(tYXTuple.getMinute() % stormConfigs.size()).isPositionFree(tYXTuple.getYxTuple());
     }
 
-    private Integer calculateSteps(int startMinute, YXTuple from, YXTuple to) throws InterruptedException {
+    public Integer calculateSteps(int startMinute, YXTuple from, YXTuple to) throws InterruptedException {
 
         List<TemporalYXTuple> unvisitedQueue = new ArrayList<>();
         List<TemporalYXTuple> visitedQueue = new ArrayList<>();
@@ -108,14 +123,14 @@ public class RunPart1 {
                     return neighborTYXTuple.getMinute();
                 }
 
-                if (!visitedQueue.contains(neighborTYXTuple) && isPositionFree(neighborTYXTuple)) {
+                if (isPositionFree(neighborTYXTuple) && !visitedQueue.contains(neighborTYXTuple)) {
                     unvisitedQueue.add(neighborTYXTuple);
                     visitedQueue.add(neighborTYXTuple);
                 }
             }
         }
 
-        return null;
+        return -1;
     }
 
     private List<YXTuple> getNeighbors(YXTuple yxTuple) {
@@ -126,7 +141,8 @@ public class RunPart1 {
 
             if ((neighborCandidate.getY() == 0 && neighborCandidate.getX()==1) || (neighborCandidate.getY() == this.mapHeight-1 && neighborCandidate.getX()==this.mapWidth-2)) {
                 neighbors.add(neighborCandidate);
-            } else if (neighborCandidate.getY()>=1 && neighborCandidate.getY()<=this.mapHeight-2 && neighborCandidate.getX()>=1 && neighborCandidate.getX()<=this.mapWidth-2) {
+            } else 
+            if (neighborCandidate.getY()>=1 && neighborCandidate.getY()<=this.mapHeight-2 && neighborCandidate.getX()>=1 && neighborCandidate.getX()<=this.mapWidth-2) {
                 neighbors.add(neighborCandidate);
             }
         }
@@ -134,7 +150,7 @@ public class RunPart1 {
         return neighbors;
     }
 
-    public int runSolution(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
+    public void init() throws URISyntaxException, FileNotFoundException, InterruptedException {
         // read input file
         List<String> strLines = readInputDataAsStrLines();
 
@@ -147,6 +163,11 @@ public class RunPart1 {
 
         // identify storm movement pattern
         this.stormConfigs = findStormsMovementPattern();
+    }
+
+
+    public int run(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
+        init();
 
         // find steps to destination
         return calculateSteps(0, new YXTuple(0, 1), new YXTuple(mapHeight-1, mapWidth-2));
@@ -155,9 +176,9 @@ public class RunPart1 {
     public static void main(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
         long startTime = System.currentTimeMillis();
 
-        System.out.println("RESULT: "+(new RunPart1().runSolution(args)));
-        System.out.println(String.format("Time: %ds", (System.currentTimeMillis()-startTime)/1000));
- 
+        int result = (new Part1Solution().run(args));
+
+        System.out.println(String.format("RESULT: %d (in %ds)", result, (System.currentTimeMillis()-startTime)/1000));
     }
 
 }
