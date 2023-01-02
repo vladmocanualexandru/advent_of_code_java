@@ -1,14 +1,17 @@
 package mov.aoc.y2022.d24;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class Part1Solution {
+import mov.aoc.templates.AbstractSolution;
+
+public class Part1Solution extends AbstractSolution{
+
+    public Part1Solution() {
+        super(2022, 24);
+    }
 
     private YXTuple[] NEIGHBOR_POSITIONS = new YXTuple[]{new YXTuple(-1, 0),new YXTuple(0, 0),new YXTuple(1, 0),new YXTuple(0, -1),new YXTuple(0, 1)};
     
@@ -87,25 +90,11 @@ public class Part1Solution {
         return stormConfigs;
     }
 
-    private List<String> readInputDataAsStrLines() throws URISyntaxException, FileNotFoundException {
-        List<String> strLines = new ArrayList<>();
-
-        URL dataResource = Part1Solution.class.getClassLoader().getResource("y2022/d24/input.txt");
-        File dataFile = new File(dataResource.toURI());
-        Scanner fileScanner = new Scanner(dataFile);
-
-        while (fileScanner.hasNext())
-            strLines.add(fileScanner.nextLine());
-
-        fileScanner.close();
-        return strLines;
-    }
-
     private boolean isPositionFree(TemporalYXTuple tYXTuple) {
         return stormConfigs.get(tYXTuple.getMinute() % stormConfigs.size()).isPositionFree(tYXTuple.getYxTuple());
     }
 
-    public Integer calculateSteps(int startMinute, YXTuple from, YXTuple to) throws InterruptedException {
+    public Integer calculateSteps(int startMinute, YXTuple from, YXTuple to) {
 
         List<TemporalYXTuple> unvisitedQueue = new ArrayList<>();
         List<TemporalYXTuple> visitedQueue = new ArrayList<>();
@@ -150,9 +139,9 @@ public class Part1Solution {
         return neighbors;
     }
 
-    public void init() throws URISyntaxException, FileNotFoundException, InterruptedException {
+    public void init() throws FileNotFoundException, URISyntaxException {
         // read input file
-        List<String> strLines = readInputDataAsStrLines();
+        List<String> strLines = inputDataReader.asStringLines();
 
         // take note of map size
         this.mapHeight = strLines.size();
@@ -166,14 +155,14 @@ public class Part1Solution {
     }
 
 
-    public int run(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
+    public int run(String[] args) throws URISyntaxException, FileNotFoundException {
         init();
 
         // find steps to destination
         return calculateSteps(0, new YXTuple(0, 1), new YXTuple(mapHeight-1, mapWidth-2));
     }
 
-    public static void main(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
+    public static void main(String[] args) throws URISyntaxException, FileNotFoundException{
         long startTime = System.currentTimeMillis();
 
         int result = (new Part1Solution().run(args));
