@@ -17,17 +17,15 @@ public class Part2Solution {
         YXTuple destination = new YXTuple(height-1, width-2);
 
         // distance from source to destination
-        int result = part1.calculateSteps(0, source, destination);
+        int sourceDestResult = part1.calculateSteps(0, source, destination);
 
-        return result;
         // distance from destination to source
-        // result += part1.calculateSteps(result, destination, source);
-
+        int destSourceResult = part1.calculateSteps(sourceDestResult, destination, source);
+        
         // // distance from source to destination
-        // result += part1.calculateSteps(result, source, destination);
+        int sourceDestResult2 = part1.calculateSteps(destSourceResult, source, destination);
 
-        // // find steps to destination
-        // return result;
+        return sourceDestResult2;
     }
 
     public static void main(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException {
